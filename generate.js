@@ -4,7 +4,7 @@ import {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   HeadingLevel, WidthType, BorderStyle, ShadingType,
 } from "docx";
-import { readFileSync, writeFileSync, unlinkSync } from "fs";
+import { readFileSync, createReadStream, writeFileSync, unlinkSync } from "fs";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -38,7 +38,7 @@ Use web search to find current, real data. Respond ONLY with a JSON object — n
 }`;
 
   const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
+    model: "claude-sonnet-4-5",
     max_tokens: 1000,
     tools: [{ type: "web_search_20250305", name: "web_search" }],
     messages: [{ role: "user", content: prompt }],
@@ -202,7 +202,6 @@ async function uploadToDrive(buffer, filename) {
   const drive = google.drive({ version: "v3", auth });
   const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
-  // Write buffer to a temp file for upload
   const tmpPath = `/tmp/${filename}`;
   writeFileSync(tmpPath, buffer);
 
@@ -214,7 +213,7 @@ async function uploadToDrive(buffer, filename) {
     },
     media: {
       mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      body: readFileSync(tmpPath),
+      body: createReadStream(tmpPath),
     },
   });
 
@@ -242,7 +241,7 @@ async function main() {
   console.log("\nBuilding .docx...");
   const buffer = await buildDocx(reports);
 
-  const date = new Date().toISOString().slice(0, 7); // e.g. 2026-06
+  const date = new Date().toISOString().slice(0, 7);
   const filename = `TSIG_Equity_Reports_${date}.docx`;
 
   console.log("Uploading to Google Drive...");
