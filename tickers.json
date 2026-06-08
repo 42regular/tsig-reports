@@ -1,0 +1,4 @@
+{
+  "tickers": ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"],
+  "notes": "Update this list whenever TSIG changes positions"
+}

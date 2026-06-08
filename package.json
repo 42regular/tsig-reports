@@ -1,0 +1,13 @@
+{
+  "name": "tsig-reports",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node generate.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "docx": "^8.5.0",
+    "googleapis": "^144.0.0"
+  }
+}
