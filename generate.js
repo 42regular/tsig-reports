@@ -8,12 +8,16 @@ import { readFileSync, createReadStream, writeFileSync, unlinkSync } from "fs";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
 // ── Fetch one ticker's report from Claude ────────────────────────────────────
 async function fetchReport(ticker) {
   console.log(`  Researching ${ticker}...`);
   const prompt = `You are an equity research analyst. Generate a concise equity report for ${ticker}.
 
-Use web search to find current, real data. Respond ONLY with a JSON object — no markdown, no backticks, no extra text:
+Use web search to find current, real data.
+
+CRITICAL: Your entire response must be a single valid JSON object. Do not write any text before or after it. Do not explain anything. Do not say "Based on...". Just the JSON, starting with { and ending with }.
 
 {
   "company_name": "Full company name",
@@ -34,7 +38,7 @@ Use web search to find current, real data. Respond ONLY with a JSON object — n
   "financials_summary": "2-3 sentences on recent revenue, earnings, and key metrics.",
   "bull_case": "2 sentences.",
   "bear_case": "2 sentences.",
-  "sentiment": "bullish | bearish | neutral"
+  "sentiment": "bullish or bearish or neutral"
 }`;
 
   const response = await client.messages.create({
@@ -48,7 +52,11 @@ Use web search to find current, real data. Respond ONLY with a JSON object — n
     .filter((b) => b.type === "text")
     .map((b) => b.text)
     .join("");
-  return JSON.parse(text.replace(/```json|```/g, "").trim());
+
+  // Extract JSON even if there's text around it
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error(`No JSON found in response: ${text.slice(0, 100)}`);
+  return JSON.parse(match[0]);
 }
 
 // ── Build the .docx from all reports ────────────────────────────────────────
@@ -206,6 +214,7 @@ async function uploadToDrive(buffer, filename) {
   writeFileSync(tmpPath, buffer);
 
   const res = await drive.files.create({
+    supportsAllDrives: true,
     requestBody: {
       name: filename,
       parents: [folderId],
@@ -236,6 +245,8 @@ async function main() {
       console.error(`  ✗ ${ticker}: ${e.message}`);
       reports.push({ ticker, error: e.message });
     }
+    // Wait 10 seconds between tickers to avoid rate limits
+    await sleep(10000);
   }
 
   console.log("\nBuilding .docx...");
