@@ -245,8 +245,8 @@ async function main() {
       console.error(`  ✗ ${ticker}: ${e.message}`);
       reports.push({ ticker, error: e.message });
     }
-    // Wait 30 seconds between tickers to avoid rate limits
-    await sleep(30000);
+    // Wait 60 seconds between tickers to avoid rate limits
+    await sleep(60000);
   }
 
   console.log("\nBuilding .docx...");
