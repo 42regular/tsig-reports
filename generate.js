@@ -232,7 +232,7 @@ async function uploadToDrive(buffer, filename) {
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
-  const { tickers } = JSON.parse(readFileSync("tickers.json", "utf8"));
+  const tickers = process.env.TICKERS.split(",").map(t => t.trim());
   console.log(`\nGenerating reports for: ${tickers.join(", ")}\n`);
 
   const reports = [];
