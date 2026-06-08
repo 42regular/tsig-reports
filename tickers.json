@@ -1,4 +1,4 @@
 {
-  "tickers": ["CARR", "LDGYY", "SMERY", "NTR", "ENS", "HON", "PWR", "CLF", "ABBNY", "SSAAY", "SSEZY", "SNPS", "BWXT", "ETN", "BEPC", "JCI", "AMPX", "DE", "IFNNY"],
+  "tickers": ["CARR", "LDGYY", "SMERY", "NTR"],
   "notes": "Update this list whenever TSIG changes positions"
 }
