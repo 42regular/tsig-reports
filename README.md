@@ -1,6 +1,6 @@
 # Equity Research Platform
 
-An automated AI-powered equity research system for TSIG's actively managed portfolio. Generates monthly reports covering price data, analyst consensus, financial metrics, and bull/bear theses for each holding — delivered automatically to the investment team via Google Drive on the first of every month.
+An automated AI-powered equity research system for TSIG's portfolio. Generates monthly reports covering price data, analyst consensus, financial metrics, and bull/bear theses for each holding — delivered automatically to the investment team via Google Drive on the first of every month.
 
 ## What it does
 
