@@ -11,7 +11,7 @@ An automated AI-powered equity research system for TSIG's portfolio. Generates m
 
 ## How the monthly run works
 
-On the 1st of every month, GitHub automatically triggers the workflow which researches each ticker sequentially, builds the report, and uploads it to Drive. The full run takes approximately 20 minutes for a 20-stock portfolio. You can also trigger it manually anytime from the Actions tab.
+On the 1st of every month, GitHub automatically triggers the workflow which researches each ticker sequentially, builds the report, and uploads it to Drive. The full run takes approximately 30 minutes for a 20-stock portfolio. You can also trigger it manually anytime from the Actions tab.
 
 ## Updating the portfolio
 
